@@ -7,11 +7,6 @@
 
 struct GraphTest : public ::testing::Test
 {
-  bool compareAdjacents(const Graph::Adjacents& actual_, const Graph::Adjacents& expected_) const
-  {
-    return Util::compareContent(std::begin(actual_), std::end(actual_), std::begin(expected_), std::end(expected_));
-  }
-
   /* This will be helpful in testing when a vertex has multiple adjacent vertices
    * Couldn't use templated variadic args because:
    *  - 1) If we call like: testAdjacents(g,0,6,2,1,5), it failed to compile as there was narrowing conversion (int to size_t)
@@ -20,18 +15,20 @@ struct GraphTest : public ::testing::Test
   {
     const auto& actualAdjacents = graph_.getAdjacents(vertex_);
     const Graph::Adjacents expectedAdjacents = vertices_;
-    if (expectTrue_)
-    {
-      EXPECT_TRUE(compareAdjacents(actualAdjacents, expectedAdjacents));
-    }
-    else
-    {
-      EXPECT_FALSE(compareAdjacents(actualAdjacents, expectedAdjacents));
-    }
+    EXPECT_EQ(Util::compareContent(actualAdjacents, expectedAdjacents), expectTrue_);
   }
 };
 
-TEST_F(GraphTest, adjacentVerticesTest)
+TEST_F(GraphTest, ConstructionTest)
+{
+  std::ifstream file{"/home/anil/CLionProjects/GraphAlgos/test/tinyG.txt"};
+  Graph g(file);
+
+  EXPECT_EQ(g.vertices(), 13);
+  EXPECT_EQ(g.edges(), 13);
+}
+
+TEST_F(GraphTest, AdjacentVerticesTest)
 {
   std::ifstream file{"/home/anil/CLionProjects/GraphAlgos/test/tinyG.txt"};
   Graph g(file);
@@ -62,3 +59,30 @@ TEST_F(GraphTest, adjacentVerticesTest)
   EXPECT_THROW(g.getAdjacents(100'000'000), InvalidInputException);
 }
 
+TEST_F(GraphTest, AddEdgeTest)
+{
+  std::ifstream file{"/home/anil/CLionProjects/GraphAlgos/test/tinyG.txt"};
+  Graph g(file);
+
+  // If an edge is added, it is added for both vertices
+  // and it doesn't impact other vertices. e.g. if an edge from vertex 2 to 7 is added, it doesn't impact vertex 8
+  testAdjacents(g, 7, {8});
+  testAdjacents(g, 2, {0});
+  testAdjacents(g, 8, {7});
+  EXPECT_NO_THROW(g.addEdge(7, 2));
+
+  testAdjacents(g, 7, {8, 2});
+  testAdjacents(g, 2, {0, 7});
+  testAdjacents(g, 8, {7});
+
+  // By design, it doesn't stop you from adding same edge again
+  for (size_t index = 0; index < 100; ++index)
+  {
+    EXPECT_NO_THROW(g.addEdge(0,1));
+  }
+
+  // But it does throw for invalid vertices
+  EXPECT_THROW(g.addEdge(-1, 0), InvalidInputException);
+  EXPECT_THROW(g.addEdge(g.vertices(), 0), InvalidInputException);
+  EXPECT_THROW(g.addEdge(g.vertices(), g.vertices()), InvalidInputException);
+}

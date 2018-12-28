@@ -30,8 +30,6 @@ TEST_F(CompareContentTest, simpleTest)
 
 TEST_F(CompareContentTest, EqualityOperatorTest)
 {
-  class Person;
-
   class Person
   {
   public:
@@ -58,5 +56,5 @@ TEST_F(CompareContentTest, EqualityOperatorTest)
   auto equalityComparator = [](const Person& person_, size_t age_) { return person_.getAge() == age_; };
 
   EXPECT_TRUE(Util::compareContent(std::begin(persons), std::end(persons), std::begin(ages), std::end(ages), equalityComparator));
-  EXPECT_FALSE(Util::compareContent(std::begin(persons), std::end(persons), std::begin(wrongAges), std::end(wrongAges),equalityComparator));
+  EXPECT_FALSE(Util::compareContent(std::begin(persons), std::end(persons), std::begin(wrongAges), std::end(wrongAges), equalityComparator));
 }

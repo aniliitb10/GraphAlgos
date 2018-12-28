@@ -7,7 +7,6 @@
 
 struct DFSTest : public ::testing::Test
 {
-
 };
 
 TEST_F(DFSTest, ConnectivityTest)

@@ -15,6 +15,14 @@ public:
   using Adjacents = std::vector<size_t>;
   using AdjacentsList = std::vector<Adjacents>;
 
+  /* Expects number of Vertices, number of Edges and then
+   * list of pair of vertices making Edges, like:
+   * 13
+   * 13
+   * 0 2
+   * 2 5
+   * ... so on
+   * */
   explicit Graph(std::istream& iStream_);
   void addEdge(size_t from_, size_t to_);
 
