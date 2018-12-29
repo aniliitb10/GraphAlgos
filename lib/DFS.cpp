@@ -10,22 +10,23 @@ Search(std::move(graph_), source_)
 
 void DFS::search(const Graph &graph_, size_t target_)
 {
-  std::stack<size_t> vertices;
-  vertices.push(target_);
+  std::stack<size_t> verticesToVisit;
+  verticesToVisit.push(target_);
   _edgeTo.at(target_) = target_;
+  _visited.at(target_) = true;
 
-  while (!vertices.empty())
+  while (!verticesToVisit.empty())
   {
-    const auto& vertex = vertices.top();
-    vertices.pop();
+    auto vertex = verticesToVisit.top(); // It would be buggy to capture vertex by reference
+    verticesToVisit.pop();
 
-    if (!_marked.at(vertex))
+    for (const auto& adjacent : graph_.getAdjacents(vertex))
     {
-      _marked.at(vertex) = true;
-      for (const auto& adjacent : graph_.getAdjacents(vertex))
+      if (!_visited.at(adjacent))
       {
-        vertices.push(adjacent);
         _edgeTo.at(adjacent) = vertex;
+        _visited.at(adjacent) = true;
+        verticesToVisit.push(adjacent);
       }
     }
   }

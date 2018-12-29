@@ -30,8 +30,12 @@ public:
   size_t vertices() const;
   void print(std::ostream& oStream_) const;
   const Adjacents& getAdjacents(size_t vertex_) const;
+  bool hasEdge(size_t from_, size_t to_) const;
 
 private:
+  // throws exception if any one of the vertices >= _vertices;
+  void validateVertices(const std::initializer_list<Adjacents::value_type> &vertices_) const;
+
   AdjacentsList _adjList;
   size_t _edges;
   size_t _vertices;
