@@ -41,21 +41,21 @@ TEST_F(IsContainerTest, CustomContainerTest)
 {
   // As Util::is_container_v only checks for begin() and end()
   // it is easy to cheat :P
+  // - just const declaration works, even the ones returnig void :)
   struct BadContainerWithoutEnd
   {
-    nullptr_t begin() { return nullptr; };
+    void begin() const;
   };
 
   struct BadContainerWithoutBegin
   {
-    nullptr_t end() { return nullptr; };
+    void end() const;
   };
 
-  //TODO:: Figure out why this is not good enough to cheat std::begin(std::declval<T>())
   struct GoodContainer
   {
-    int begin() { return 0;}
-    int end() { return 0;}
+    void begin() const;
+    void end() const;
   };
 
   EXPECT_TRUE(Util::is_container_v<GoodContainer>);

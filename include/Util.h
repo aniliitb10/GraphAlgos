@@ -80,17 +80,16 @@ struct Util
     return true;
   }
 
-
   /* A way to determine if a class is a container (precisely, an iterable) or not
-   * It checks if the class has begin() and end() defined
-   * (thanks to std::declval for testing the existence of these functions without instantiating the class). */
+   * It checks if the class has begin() const and end() const declared
+   * (thanks to std::declval for testing the declaration of these functions without instantiating the class). */
 
   template <typename, typename = std::void_t <>>
   struct is_container : std::false_type{};
 
   template <typename T>
-  struct is_container <T, std::void_t<decltype(std::declval<T>().begin()),
-                                      decltype(std::declval<T>().end())
+  struct is_container <T, std::void_t<decltype(std::begin(std::declval<T>())),
+                                      decltype(std::end(std::declval<T>()))
                                      >
                       > : std::true_type {};
 
@@ -98,7 +97,7 @@ struct Util
   constexpr static bool is_container_v = is_container<T>::value;
 
   /* Now using is_container_v to call compareContent with Containers
-   * Notice the use of std::enable_if_t: this function is enabled only Container1 and Container2
+   * Notice the use of std::enable_if_t: this function is enabled only when Container1 and Container2
    * are containers (according to is_container_v)*/
   template <class Container1, class Container2, class EqualToComp = std::equal_to<>>
   static auto compareContent(const Container1& left_, const Container2& right_, EqualToComp equalToComp_ = EqualToComp())
