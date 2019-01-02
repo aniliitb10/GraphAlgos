@@ -1,12 +1,12 @@
 #include "../include/Exception.h"
 
-#include "../include/Search.h"
+#include "../include/Paths.h"
 #include "../include/Util.h"
 #include <limits>
 #include <stack>
 #include <sstream>
 
-Search::Search(Graph graph_, size_t source_):
+Paths::Paths(Graph graph_, size_t source_):
 _graph(std::move(graph_)),
 _source(source_)
 {
@@ -14,13 +14,13 @@ _source(source_)
   _edgeTo.resize(_graph.vertices(), std::numeric_limits<size_t>::max());
 }
 
-bool Search::hasPathTo(size_t target_) const
+bool Paths::hasPathTo(size_t target_) const
 {
   validateVertices({target_});
   return _visited.at(target_);
 }
 
-Search::Vertices Search::pathTo(size_t target_) const
+Paths::Vertices Paths::pathTo(size_t target_) const
 {
   validateVertices({target_});
   if (!hasPathTo(target_))
@@ -48,7 +48,7 @@ Search::Vertices Search::pathTo(size_t target_) const
   return sourceToTargetPath;
 }
 
-void Search::print(std::ostream &os_) const
+void Paths::print(std::ostream &os_) const
 {
   os_ << "Source: " << _source << Util::NL
       << "Are vertices marked:" << Util::NL << std::boolalpha;
@@ -72,17 +72,17 @@ void Search::print(std::ostream &os_) const
   _graph.print(os_);
 }
 
-size_t Search::getSource() const
+size_t Paths::getSource() const
 {
   return _source;
 }
 
-const Graph &Search::getGraph() const
+const Graph &Paths::getGraph() const
 {
   return _graph;
 }
 
-void Search::validateVertices(const std::initializer_list<Vertices::value_type> &vertices_) const
+void Paths::validateVertices(const std::initializer_list<Vertices::value_type> &vertices_) const
 {
   for (auto vertex : vertices_)
   {

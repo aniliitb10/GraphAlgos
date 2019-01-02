@@ -1,0 +1,32 @@
+#include "../include/BFPaths.h"
+#include <queue>
+
+BFPaths::BFPaths(Graph graph_, Paths::Vertex source_) : Paths(std::move(graph_), source_)
+{
+  search(_graph, _source);
+}
+
+void BFPaths::search(const Graph &graph_, Paths::Vertex target_)
+{
+  std::queue<Paths::Vertex> verticesToVisit;
+  _visited.at(target_) = true;
+  _edgeTo.at(target_) = target_;
+  verticesToVisit.push(target_);
+
+
+  while (!verticesToVisit.empty())
+  {
+    Paths::Vertex vertex = verticesToVisit.front();
+    verticesToVisit.pop();
+
+    for (const auto& adjacent : graph_.getAdjacents(vertex))
+    {
+      if (!_visited.at(adjacent))
+      {
+        _visited.at(adjacent) = true;
+        _edgeTo.at(adjacent) = vertex;
+        verticesToVisit.push(adjacent);
+      }
+    }
+  }
+}

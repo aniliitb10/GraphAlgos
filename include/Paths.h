@@ -6,30 +6,32 @@
 #include <vector>
 
 /*
- * This is base class for both DFS and BFS
+ * This is base class for both DFPaths and BFSPaths
  * */
 
-class Search
+class Paths
 {
 public:
   using BoolList = std::basic_string<bool>;
-  using UnIntList = std::vector<size_t>;
-  using Vertices = UnIntList;
+  using Vertex = size_t;
+  using Vertices = std::vector<Vertex>;
 
-  Search(Graph graph_, size_t source_);
-  bool hasPathTo(size_t target_) const;
+  Paths(Graph graph_, Vertex source_);
+  bool hasPathTo(Vertex target_) const;
   const Graph& getGraph() const;
-  size_t getSource() const;
-  virtual Vertices pathTo(size_t target_) const;
+  Vertex getSource() const;
+  virtual Vertices pathTo(Vertex target_) const;
+
+  // Only for debugging
   void print(std::ostream& os_) const;
 
 protected:
-  virtual void search(const Graph& graph_, size_t target_) = 0;
+  virtual void search(const Graph& graph_, Vertex target_) = 0;
 
   Graph     _graph;
   size_t    _source; // Source for the search algorithm
   BoolList  _visited; // Has this vertex been visited?
-  UnIntList _edgeTo; // Reached to index for first time from value
+  Vertices  _edgeTo; // Reached to index for first time from value
 
 private:
   // throws exception if any one of the vertices >= _graph.vertices();

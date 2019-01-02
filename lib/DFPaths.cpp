@@ -1,16 +1,16 @@
-#include "../include/DFS.h"
+#include "../include/DFPaths.h"
 
 #include <stack>
 
-DFS::DFS(Graph graph_, size_t source_):
-Search(std::move(graph_), source_)
+DFPaths::DFPaths(Graph graph_, Paths::Vertex source_):
+Paths(std::move(graph_), source_)
 {
   search(_graph, _source);
 }
 
-void DFS::search(const Graph &graph_, size_t target_)
+void DFPaths::search(const Graph &graph_, Paths::Vertex target_)
 {
-  std::stack<size_t> verticesToVisit;
+  std::stack<Paths::Vertex> verticesToVisit;
   verticesToVisit.push(target_);
   _edgeTo.at(target_) = target_;
   _visited.at(target_) = true;

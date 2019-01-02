@@ -18,14 +18,14 @@ TEST_F(CompareContentTest, simpleTest)
   std::list<int>intList{3,4,2,10,4};
   std::unordered_multiset<int>intUnSet{10,2,4,3,4};
 
-  EXPECT_TRUE(Util::compareContent(std::begin(intVec), std::end(intVec), std::begin(intSet), std::end(intSet)));
-  EXPECT_TRUE(Util::compareContent(std::begin(intVec), std::end(intVec), std::begin(intUnSet), std::end(intUnSet)));
-  EXPECT_TRUE(Util::compareContent(std::begin(intVec), std::end(intVec), std::begin(intList), std::end(intList)));
+  EXPECT_TRUE(Util::compareContent(intVec, intSet));
+  EXPECT_TRUE(Util::compareContent(intVec, intUnSet));
+  EXPECT_TRUE(Util::compareContent(intVec, intList));
 
-  EXPECT_TRUE(Util::compareContent(std::begin(intSet), std::end(intSet), std::begin(intList), std::end(intList)));
-  EXPECT_TRUE(Util::compareContent(std::begin(intSet), std::end(intSet), std::begin(intUnSet), std::end(intUnSet)));
+  EXPECT_TRUE(Util::compareContent(intSet, intList));
+  EXPECT_TRUE(Util::compareContent(intSet, intUnSet));
 
-  EXPECT_TRUE(Util::compareContent(std::begin(intList), std::end(intList), std::begin(intUnSet), std::end(intUnSet)));
+  EXPECT_TRUE(Util::compareContent(intList, intUnSet));
 }
 
 TEST_F(CompareContentTest, EqualityOperatorTest)
@@ -55,6 +55,6 @@ TEST_F(CompareContentTest, EqualityOperatorTest)
 
   auto equalityComparator = [](const Person& person_, size_t age_) { return person_.getAge() == age_; };
 
-  EXPECT_TRUE(Util::compareContent(std::begin(persons), std::end(persons), std::begin(ages), std::end(ages), equalityComparator));
-  EXPECT_FALSE(Util::compareContent(std::begin(persons), std::end(persons), std::begin(wrongAges), std::end(wrongAges), equalityComparator));
+  EXPECT_TRUE(Util::compareContent(persons, ages, equalityComparator));
+  EXPECT_FALSE(Util::compareContent(persons, wrongAges, equalityComparator));
 }
