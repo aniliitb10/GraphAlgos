@@ -10,6 +10,31 @@ Paths(std::move(graph_), source_)
 
 void DFPaths::search(const Graph &graph_, Paths::Vertex target_)
 {
+  // if we put this line inside for loop, then source would never be marked visited
+  _visited.at(target_) = true;
+
+  for (const auto& adjacent : graph_.getAdjacents(target_))
+  {
+    if (!_visited.at(adjacent))
+    {
+      _edgeTo.at(adjacent) = target_;
+      _colors.at(adjacent) = !_colors.at(target_);
+      // _visited.at(target_) = true; commented out as it has been kept at the top of this function
+      search(graph_, adjacent);
+    }
+    else
+    {
+      if (_colors.at(adjacent) == _colors.at(target_))
+      {
+        _isBipartite = false;
+      }
+    }
+  }
+}
+
+/*
+void DFPaths::search(const Graph &graph_, Paths::Vertex target_)
+{
   std::stack<Paths::Vertex> verticesToVisit;
   verticesToVisit.push(target_);
   _edgeTo.at(target_) = target_;
@@ -42,4 +67,4 @@ void DFPaths::search(const Graph &graph_, Paths::Vertex target_)
       }
     }
   }
-}
+}*/

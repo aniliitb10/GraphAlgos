@@ -11,7 +11,6 @@ void BFPaths::search(const Graph &graph_, Paths::Vertex target_)
   std::queue<Paths::Vertex> verticesToVisit;
   verticesToVisit.push(target_);
   _visited.at(target_) = true;
-  _edgeTo.at(target_) = target_;
 
   while (!verticesToVisit.empty())
   {

@@ -33,7 +33,7 @@ Paths::Vertices Paths::pathTo(size_t target_) const
   std::stack<size_t> targetToSourcePath;
 
   targetToSourcePath.push(target_);
-  while(_edgeTo.at(vertex) != vertex)
+  while(vertex != _source)
   {
     targetToSourcePath.push(_edgeTo.at(vertex));
     vertex = _edgeTo.at(vertex);
@@ -64,7 +64,14 @@ void Paths::print(std::ostream &os_) const
   {
     if (_visited.at(index))
     {
-      os_ << index << Util::WS <<  _edgeTo.at(index) << Util::NL;
+      if (index == _source)
+      {
+        os_ << index << Util::WS <<  "source" << Util::NL;
+      }
+      else
+      {
+        os_ << index << Util::WS <<  _edgeTo.at(index) << Util::NL;
+      }
     }
   }
 
