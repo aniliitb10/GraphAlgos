@@ -9,10 +9,9 @@ BFPaths::BFPaths(Graph graph_, Paths::Vertex source_) : Paths(std::move(graph_),
 void BFPaths::search(const Graph &graph_, Paths::Vertex target_)
 {
   std::queue<Paths::Vertex> verticesToVisit;
+  verticesToVisit.push(target_);
   _visited.at(target_) = true;
   _edgeTo.at(target_) = target_;
-  verticesToVisit.push(target_);
-
 
   while (!verticesToVisit.empty())
   {
@@ -23,9 +22,18 @@ void BFPaths::search(const Graph &graph_, Paths::Vertex target_)
     {
       if (!_visited.at(adjacent))
       {
+        verticesToVisit.push(adjacent);
         _visited.at(adjacent) = true;
         _edgeTo.at(adjacent) = vertex;
-        verticesToVisit.push(adjacent);
+        _colors.at(adjacent) = !_colors.at(vertex);
+      }
+      else
+      {
+        // here _colors.at(adjacent) doesn't give the default value as it has been assigned once
+        if (_colors.at(adjacent) == _colors.at(vertex))
+        {
+          _isBipartite = false;
+        }
       }
     }
   }

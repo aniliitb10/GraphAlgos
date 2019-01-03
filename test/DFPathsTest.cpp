@@ -42,3 +42,22 @@ TEST_F(DFPathsTest, PathTest)
   EXPECT_THROW(dfPaths.pathTo(10'000'00), InvalidInputException);
   EXPECT_THROW(dfPaths.pathTo(-1), InvalidInputException);
 }
+
+TEST_F(DFPathsTest, ImplemntationTest)
+{
+  std::istringstream is{"3 4 0 1 0 2 1 2 2 1", std::ios_base::in};
+  DFPaths dfPaths{Graph{is}, 0};
+  EXPECT_EQ(dfPaths.pathTo(0).size(), 1);
+  EXPECT_NE(dfPaths.pathTo(2).size(), dfPaths.pathTo(1).size());
+  const auto path2size = dfPaths.pathTo(2).size();
+  const auto path1size = dfPaths.pathTo(1).size();
+
+  if (path1size > path2size)
+  {
+    EXPECT_EQ(path1size - path2size, 1);
+  }
+  else
+  {
+    EXPECT_EQ(path2size - path1size, 1);
+  }
+}

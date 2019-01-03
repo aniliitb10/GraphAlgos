@@ -12,6 +12,7 @@ _source(source_)
 {
   _visited.resize(_graph.vertices(), false);
   _edgeTo.resize(_graph.vertices(), std::numeric_limits<size_t>::max());
+  _colors.resize(_graph.vertices(), false);
 }
 
 bool Paths::hasPathTo(size_t target_) const
@@ -65,7 +66,6 @@ void Paths::print(std::ostream &os_) const
     {
       os_ << index << Util::WS <<  _edgeTo.at(index) << Util::NL;
     }
-
   }
 
   os_ << "Graph details:" << Util::NL;
@@ -93,4 +93,9 @@ void Paths::validateVertices(const std::initializer_list<Vertices::value_type> &
       throw InvalidInputException(os.str());
     }
   }
+}
+
+bool Paths::isBipartite() const
+{
+  return _isBipartite;
 }

@@ -12,6 +12,8 @@ struct PathsTest
   virtual void hasNoPathsTo(const Paths& paths_, const Paths::Vertices& vertices_);
   virtual void pathTestWithInvalidVertices(const Paths& paths_, const Paths::Vertices& vertices_);
   void validatePath(const Paths& paths_, size_t target_, bool pathExpected_ = true);
+
+  virtual ~PathsTest() = default; // dtr of base class must be virtual
 };
 
 inline void PathsTest::hasPathsTo(const Paths& paths_, Paths::Vertices vertices_)

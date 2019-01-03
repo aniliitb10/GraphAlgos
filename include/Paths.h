@@ -21,9 +21,12 @@ public:
   const Graph& getGraph() const;
   Vertex getSource() const;
   virtual Vertices pathTo(Vertex target_) const;
+  bool isBipartite() const;
 
   // Only for debugging
   void print(std::ostream& os_) const;
+
+  virtual ~Paths() = default; // base class's dtr must be virtual
 
 protected:
   virtual void search(const Graph& graph_, Vertex target_) = 0;
@@ -32,6 +35,8 @@ protected:
   size_t    _source; // Source for the search algorithm
   BoolList  _visited; // Has this vertex been visited?
   Vertices  _edgeTo; // Reached to index for first time from value
+  bool      _isBipartite = true;
+  BoolList  _colors; // true and false represent two colors
 
 private:
   // throws exception if any one of the vertices >= _graph.vertices();
