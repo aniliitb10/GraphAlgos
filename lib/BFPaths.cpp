@@ -23,7 +23,7 @@ void BFPaths::search(const Graph &graph_, Paths::Vertex target_)
       {
         verticesToVisit.push(adjacent);
         _visited.at(adjacent) = true;
-        _edgeTo.at(adjacent) = vertex;
+        _edgeTo.at(adjacent) = vertex; // this isn't required at the top as source shouldn't be reached from another vertex
         _colors.at(adjacent) = !_colors.at(vertex);
       }
       else

@@ -11,6 +11,7 @@ struct Util
 {
   static constexpr char NL = '\n';
   static constexpr char WS = ' ';
+  using StrList = std::vector<std::string>;
 
   template <typename Type>
   static auto readNum(std::istream& ios_, bool keepLooping_)
@@ -103,5 +104,81 @@ struct Util
        -> std::enable_if_t <is_container_v<Container1> && is_container_v<Container2>, bool>
   {
     return compareContent(std::begin(left_), std::end(left_), std::begin(right_), std::end(right_), equalToComp_);
+  }
+
+  /* These char_count set of functions count the characters EXCLUDING null char:
+   * - Except for char and const char[], it calls std::size() on the arg
+   * - For char, it returns 1
+   * - For const char[], it returns number of chars excluding null char*/
+  template <typename T>
+  static constexpr auto char_count(const T& elem_)
+  {
+    return std::size(elem_);
+  }
+
+  static constexpr size_t char_count(const char& char_)
+  {
+    return 1;
+  }
+
+  template <typename T, size_t size_>
+  static constexpr size_t char_count(T(&)[size_])
+  {
+    // returns the number of characters excluding null char
+    // => size(""): 0
+    // => size("a"): 1
+    // => size("a "): 2
+
+    return size_ - 1;
+  }
+
+  /* finds first occurrence of anything else than sep_
+   * in "__first_name", if target_ is '_', it returns 2 (the index if 'f')
+   * Following is its comparision with std::string::find_first_not_of:
+   *  - if target_ is a std::string, this function matches the entire string in source_
+   *  - while std::string::find_first_not_of matches any character from target_ in source_ */
+  template <typename T>
+  static size_t find_first_not_of(const std::string& source_, const T& target_, size_t pos_ = 0)
+  {
+    // Quick checks
+    if (pos_ >= source_.size())                           return std::string::npos;
+    if (source_.find(target_, pos_) == std::string::npos) return pos_;
+
+    while (source_.find(target_, pos_) == pos_)
+    {
+      pos_ += char_count(target_); // calls my custom size function
+    }
+
+    return ((pos_ < source_.size()) ? pos_ : std::string::npos);
+  }
+
+  /* A helper to find if decayed type of T is same as U */
+  template <typename T, typename U>
+  static constexpr bool decay_eq_v = std::is_same_v<typename std::decay_t<T>, U>;
+
+  /* Splits source_ based on sep_ and stores in itr_ (like std::insert_iterator)
+   * sep_ can be char or const char[] or std::string
+   * It ignores continuous occurrence of sep_
+   *  - if sep_ is '_' and source_ is: "first____second" then itr_ is appended just "first" and "second"
+   *
+   * It should be noted that template condition should be: decay_eq_v<T, char*>
+   * instead of: decay_eq_v<T, const char*> as the corresponding argument type in function is const T& sep_
+   * and hence the T itself is not of const type
+   *  */
+  template <typename T, typename OutItr>
+  static auto split(const std::string& source_, const T& sep_, OutItr itr_, size_t pos_ = 0)
+  -> std::enable_if_t<(decay_eq_v<T, char> || decay_eq_v<T, char*> || decay_eq_v<T, std::string>), void>
+  {
+    auto beginIndex = find_first_not_of(source_, sep_, pos_);
+    while(beginIndex != std::string::npos)
+    {
+      auto endIndex = source_.find(sep_, beginIndex);
+
+      auto word = source_.substr(beginIndex, ((endIndex != std::string::npos) ? (endIndex - beginIndex) : std::string::npos));
+      beginIndex += word.size();
+      itr_ = std::move(word);
+
+      beginIndex = find_first_not_of(source_, sep_, beginIndex);
+    }
   }
 };

@@ -10,7 +10,7 @@ Paths(std::move(graph_), source_)
 
 void DFPaths::search(const Graph &graph_, Paths::Vertex target_)
 {
-  // if we put this line inside for loop, then source would never be marked visited
+  // if we put this line inside if block of for loop, then source would never be marked visited
   _visited.at(target_) = true;
 
   for (const auto& adjacent : graph_.getAdjacents(target_))
@@ -19,7 +19,7 @@ void DFPaths::search(const Graph &graph_, Paths::Vertex target_)
     {
       _edgeTo.at(adjacent) = target_;
       _colors.at(adjacent) = !_colors.at(target_);
-      // _visited.at(target_) = true; commented out as it has been kept at the top of this function
+      // _visited.at(adjacent) = true; commented out as it has been kept at the top of this function
       search(graph_, adjacent);
     }
     else

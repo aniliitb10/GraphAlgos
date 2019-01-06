@@ -30,6 +30,8 @@ public:
   size_t vertices() const;
   void print(std::ostream& oStream_) const;
   const Adjacents& getAdjacents(size_t vertex_) const;
+
+  // Searches linearly in its Adjacents.
   bool hasEdge(size_t from_, size_t to_) const;
 
 private:

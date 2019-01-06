@@ -11,7 +11,7 @@ struct GraphTest : public ::testing::Test
    * Couldn't use templated variadic args because:
    *  - 1) If we call like: testAdjacents(g,0,6,2,1,5), it failed to compile as there was narrowing conversion (int to size_t)
    *  - 2) The type of all parameters was fixed (size_t), so type pack looked over-kill*/
-  bool testAdjacents(const Graph& graph_, size_t vertex_, std::initializer_list<size_t> vertices_, bool expectTrue_ = true) const
+  void testAdjacents(const Graph& graph_, size_t vertex_, std::initializer_list<size_t> vertices_, bool expectTrue_ = true) const
   {
     const auto& actualAdjacents = graph_.getAdjacents(vertex_);
     const Graph::Adjacents expectedAdjacents = vertices_;
