@@ -175,7 +175,7 @@ struct Util
       auto endIndex = source_.find(sep_, beginIndex);
 
       auto word = source_.substr(beginIndex, ((endIndex != std::string::npos) ? (endIndex - beginIndex) : std::string::npos));
-      beginIndex += word.size();
+      beginIndex += word.size(); // word would be moved later, so using it now
       itr_ = std::move(word);
 
       beginIndex = find_first_not_of(source_, sep_, beginIndex);
