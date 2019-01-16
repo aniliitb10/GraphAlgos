@@ -86,13 +86,6 @@ auto Tree<K, V>::insert(NodePtr &nodePtr_, const K &key_, const V &value_, bool 
     nodePtr_ = std::make_shared<typename NodePtr::element_type>(key_, value_);
   }
 
-  else if (key_ == nodePtr_->_data._key)
-  {
-    inserted = false;
-    // leave the nodePtr untouched
-    // nodePtr_->_data._value = value_;
-  }
-
   else if (key_ < nodePtr_->_data._key)
   {
     nodePtr_->_leftPtr = insert(nodePtr_->_leftPtr, key_, value_, inserted);
@@ -101,6 +94,13 @@ auto Tree<K, V>::insert(NodePtr &nodePtr_, const K &key_, const V &value_, bool 
   else if (key_ > nodePtr_->_data._key)
   {
     nodePtr_->_rightPtr = insert(nodePtr_->_rightPtr, key_, value_, inserted);
+  }
+
+  else if (key_ == nodePtr_->_data._key)
+  {
+    inserted = false;
+    // leave the nodePtr untouched
+    // nodePtr_->_data._value = value_;
   }
 
   return nodePtr_;
