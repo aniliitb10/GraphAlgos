@@ -7,7 +7,6 @@
 /* To be used as:
  *  auto evenNums = nums | filter([](auto num_){ return num_ % 2 == 0; }); */
 
-
 /* Some Utils to determine if container has push_back method*/
 template <typename Container, typename = void>
 struct has_push_back : std::false_type{};
@@ -42,31 +41,27 @@ auto filter(const Func& func_) -> FilterProxy<Func>
   return FilterProxy<Func>{func_};
 }
 
+/* If not using C++17 (without if constexpr), this can be implemented using two different functions
+ * - each calling either push_back or insert */
 template <typename Container, typename Func>
-auto operator|(const Container& container_, const FilterProxy<Func>& funcProxy_) -> std::enable_if_t <has_push_back_v<Container>, Container>
-{
-  Container filtered;
-  for (const auto elem : container_)
-  {
-    if (funcProxy_._func(elem))
-    {
-      filtered.push_back(elem);
-    }
-  }
-
-  return filtered;
-}
-
-template <typename Container, typename Func>
-auto operator|(const Container& container_, const FilterProxy<Func>& funcProxy_) -> std::enable_if_t <has_insert_v<Container>, Container>
+auto operator|(const Container& container_, const FilterProxy<Func>& funcProxy_)
+-> std::enable_if_t <(has_insert_v<Container> || has_push_back_v<Container>), Container>
 {
   Container filtered;
   for (const auto& elem : container_)
   {
     if (funcProxy_._func(elem))
     {
-      filtered.insert(elem);
+      if constexpr (has_push_back_v<Container>)
+      {
+        filtered.push_back(elem);
+      }
+      else // has_insert_v<Container>
+      {
+        filtered.insert(elem);
+      }
     }
   }
+
   return filtered;
 }
