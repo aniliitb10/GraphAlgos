@@ -7,11 +7,12 @@
 Graph::Graph(std::istream &iStream_)
 {
   _vertices = Util::readUInt(iStream_);
-  _edges = Util::readUInt(iStream_);
+  _edges = 0;
+  auto edges = Util::readUInt(iStream_);
 
   _adjList.resize(_vertices);
   
-  for (size_t index = 0; index < _edges; ++index)
+  for (size_t index = 0; index < edges; ++index)
   {
     addEdge(Util::readUInt(iStream_), Util::readUInt(iStream_));
   }
@@ -22,6 +23,7 @@ void Graph::addEdge(size_t from_, size_t to_)
   validateVertices({from_, to_});
   _adjList.at(from_).push_back(to_);
   _adjList.at(to_).push_back(from_);
+  _edges++;
 }
 
 size_t Graph::edges() const

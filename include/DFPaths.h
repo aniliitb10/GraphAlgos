@@ -27,5 +27,5 @@ private:
    * As you can see, Non-Recursive-Stack-Queue-Replacement is much like BFS where
    * both vertices 1 and 2 were reached from vertex 0
    * */
-  void search(const Graph &graph_, Paths::Vertex target_) override;
+  void search(const Graph &graph_, Paths::Vertex vertex_) override;
 };

@@ -6,11 +6,11 @@ BFPaths::BFPaths(Graph graph_, Paths::Vertex source_) : Paths(std::move(graph_),
   search(_graph, _source);
 }
 
-void BFPaths::search(const Graph &graph_, Paths::Vertex target_)
+void BFPaths::search(const Graph &graph_, Paths::Vertex vertex_)
 {
   std::queue<Paths::Vertex> verticesToVisit;
-  verticesToVisit.push(target_);
-  _visited.at(target_) = true;
+  verticesToVisit.push(vertex_);
+  _visited.at(vertex_) = true;
 
   while (!verticesToVisit.empty())
   {

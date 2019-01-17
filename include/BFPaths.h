@@ -9,5 +9,5 @@ public:
   explicit BFPaths(Graph graph_, Paths::Vertex source_);
 
 protected:
-  void search(const Graph &graph_, Vertex target_) override;
+  void search(const Graph &graph_, Vertex vertex_) override;
 };
