@@ -31,6 +31,7 @@ struct Util
     {
       throw InvalidInputException("Failed to read an integer");
     }
+
     return readValue;
   }
 

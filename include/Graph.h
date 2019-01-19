@@ -12,9 +12,15 @@
 class Graph
 {
 public:
-  using Adjacents = std::vector<size_t>;
+  using Vertex = size_t;
+  using Vertices = std::vector<Vertex>;
+
+  using Adjacents = std::vector<Vertex>;
   using AdjacentsList = std::vector<Adjacents>;
 
+  virtual ~Graph() = default;
+  Graph(Graph&&) = default;
+  Graph(const Graph&) = default;
   /* Expects number of Vertices, number of Edges and then
    * list of pair of vertices making Edges, like:
    * 13
@@ -22,23 +28,26 @@ public:
    * 0 2
    * 2 5
    * ... so on
+   *
+   * initAdjList_ is to support DiGraph as we can't call (overloaded) DiGraph's addEdge from constructor of Graph
    * */
-  explicit Graph(std::istream& iStream_);
-  void addEdge(size_t from_, size_t to_);
 
-  size_t edges() const;
-  size_t vertices() const;
+  explicit Graph(std::istream& iStream_, bool initAdjList_ = true);
+  virtual void addEdge(Vertex from_, Vertex to_);
+
+  Vertex edges() const;
+  Vertex vertices() const;
   void print(std::ostream& oStream_) const;
-  const Adjacents& getAdjacents(size_t vertex_) const;
+  const Adjacents& getAdjacents(Vertex vertex_) const;
 
   // Searches linearly in its Adjacents.
-  bool hasEdge(size_t from_, size_t to_) const;
+  bool hasEdge(Vertex from_, Vertex to_) const;
 
-private:
+protected:
   // throws exception if any one of the vertices >= _vertices;
-  void validateVertices(const std::initializer_list<Adjacents::value_type> &vertices_) const;
+  void validateVertices(const Vertices& vertices_) const;
 
   AdjacentsList _adjList;
-  size_t _edges;
-  size_t _vertices;
+  size_t _edges = 0;
+  size_t _vertices = 0;
 };

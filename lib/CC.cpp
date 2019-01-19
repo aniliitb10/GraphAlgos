@@ -10,7 +10,7 @@ _graph(std::move(graph_))
   _ids.resize(_graph.vertices(), std::numeric_limits<std::size_t>::max());
   _visited.resize(_graph.vertices(), false);
 
-  for (auto vertex = 0; vertex < _graph.vertices(); ++vertex)
+  for (size_t vertex = 0; vertex < _graph.vertices(); ++vertex)
   {
     if (!_visited.at(vertex))
     {

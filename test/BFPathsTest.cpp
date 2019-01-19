@@ -12,7 +12,9 @@ struct BFSPathTest : PathsTest, public ::testing::Test
 TEST_F(BFSPathTest, ConnectivityTest)
 {
   std::ifstream file{"/home/anil/CLionProjects/GraphAlgos/test/tinyG.txt"};
+  ASSERT_FALSE(file.fail());
   Graph g(file);
+
 
   BFPaths bfPaths{g, 3};
   hasPathsTo(bfPaths, Paths::Vertices{0,1,2,3,4,5,6});
@@ -23,6 +25,7 @@ TEST_F(BFSPathTest, ConnectivityTest)
 TEST_F(BFSPathTest, PathsTests)
 {
   std::ifstream file{"/home/anil/CLionProjects/GraphAlgos/test/tinyG.txt"};
+  ASSERT_FALSE(file.fail());
   BFPaths bfPaths{Graph{file}, 3};
 
   for (size_t index = 0; index <= 6; ++index)
@@ -43,6 +46,7 @@ TEST_F(BFSPathTest, PathsTests)
 TEST_F(BFSPathTest, ShortestPathTest)
 {
   std::ifstream file{"/home/anil/CLionProjects/GraphAlgos/test/tinyG.txt"};
+  ASSERT_FALSE(file.fail());
   BFPaths bfPaths{Graph{file}, 3};
 
   EXPECT_EQ(bfPaths.pathTo(0).size(), 3);

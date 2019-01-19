@@ -22,6 +22,7 @@ struct GraphTest : public ::testing::Test
 TEST_F(GraphTest, ConstructionTest)
 {
   std::ifstream file{"/home/anil/CLionProjects/GraphAlgos/test/tinyG.txt"};
+  ASSERT_FALSE(file.fail());
   Graph g(file);
 
   EXPECT_EQ(g.vertices(), 13);
@@ -31,6 +32,7 @@ TEST_F(GraphTest, ConstructionTest)
 TEST_F(GraphTest, AdjacentVerticesTest)
 {
   std::ifstream file{"/home/anil/CLionProjects/GraphAlgos/test/tinyG.txt"};
+  ASSERT_FALSE(file.fail());
   Graph g(file);
 
   testAdjacents(g, 0, {6, 2, 1, 5});
@@ -55,13 +57,14 @@ TEST_F(GraphTest, AdjacentVerticesTest)
   testAdjacents(g, 12, {9, 11});
 
   EXPECT_THROW(g.getAdjacents(-1), InvalidInputException);
-  EXPECT_THROW(g.getAdjacents(13), InvalidInputException);
+  EXPECT_THROW(g.getAdjacents(g.vertices()), InvalidInputException);
   EXPECT_THROW(g.getAdjacents(100'000'000), InvalidInputException);
 }
 
 TEST_F(GraphTest, AddEdgeTest)
 {
   std::ifstream file{"/home/anil/CLionProjects/GraphAlgos/test/tinyG.txt"};
+  ASSERT_FALSE(file.fail());
   Graph g(file);
 
   // If an edge is added, it is added for both vertices
